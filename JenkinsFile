@@ -1,18 +1,27 @@
-pipeline {
-    agent any
-    stages {
+node('node') {
 
-         stage('checkout') {
-                steps {
-                    checkout scm
-                }
-            }
 
-        stage('build') {
-            steps {
-                sh 'mvn --version'
-                sh 'mvn clean test'
-            }
-        }
+    currentBuild.result = "SUCCESS"
+
+    try {
+
+       stage('Checkout'){
+
+          checkout scm
+       }
+
+       stage('Test'){
+
+         sh 'mvn clean test'
+
+       }
+
     }
+    catch (err) {
+
+        currentBuild.result = "FAILURE"
+
+          throw err
+    }
+
 }
