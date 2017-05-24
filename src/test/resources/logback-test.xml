@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{15} - %msg%n%rEx</pattern>
+            <immediateFlush>false</immediateFlush>
+        </encoder>
+    </appender>
+
+    <appender name="logFile" class="ch.qos.logback.core.FileAppender">
+        <file>
+            logs/blog-performance-test.log
+        </file>
+        <append>true</append>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%-5level] %logger{15} - %msg%n%rEx</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="CONSOLE" level="WARN">
+        <appender-ref ref="CONSOLE" />
+    </logger>
+
+    <!-- Uncomment for logging ALL HTTP request and responses -->
+        <!--<logger name="io.gatling.http" level="TRACE" />-->
+
+    <!--enable when need to debug-->
+    <!--<logger name="io.gatling.http.ahc" level="TRACE"/>-->
+
+    <root level="DEBUG">
+        <!--<appender-ref ref="logFile"/>-->
+        <!--Uncomment to print log on Console -->
+        <!--<appender-ref ref="CONSOLE"/>-->
+    </root>
+
+</configuration>
