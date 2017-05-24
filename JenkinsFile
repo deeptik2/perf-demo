@@ -1,27 +1,33 @@
-node('node') {
+try {
+    runPipeline()
+} catch (error) {
+    throw error
+}
+
+def runPipeline() {
+    node('') {
+
+            sh 'rm -rf ./*'
+            sh "ls -lrt"
+
+            stage('Checkout') {
+                git url: "https://github.com/deeptik2/perf-demo.git"
+                sh 'find .'
+            }
+
+            stage('Test') {
+                dir('order-processor') {
+                    git url: "ssh://git@stash.zooplus.de:22/op/order-processor-ng.git", credentialsId: env.JENKINS_STASH_CREDENTIALS
+                    sh 'find .'
+                    sh """
+                        mvn clean
+                        ls -lrt
+                        mvn gatling:execute -Dgatling.simulationClass=simulation.BlogsPerfLoadTest
+                    """
+                }
+            }
 
 
-    currentBuild.result = "SUCCESS"
-
-    try {
-
-       stage('Checkout'){
-
-          checkout scm
-       }
-
-       stage('Test'){
-
-         sh 'mvn clean test'
-
-       }
-
+        }
     }
-    catch (err) {
-
-        currentBuild.result = "FAILURE"
-
-          throw err
-    }
-
 }
